@@ -7,6 +7,7 @@ import { CartProvider, useCart } from "./cart-provider";
 import { WishlistProvider, useWishlist } from "./wishlist-provider";
 import { QuickViewProvider } from "./quick-view-provider";
 import { AuthProvider } from "./auth-provider";
+import { PromotionProvider } from "./promotion-provider";
 
 function ShellInner({ children }: { children: React.ReactNode }) {
   const { openCart, itemCount } = useCart();
@@ -25,6 +26,7 @@ function ShellInner({ children }: { children: React.ReactNode }) {
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
+      <PromotionProvider>
       <CartProvider>
         <WishlistProvider>
           <QuickViewProvider>
@@ -32,6 +34,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </QuickViewProvider>
         </WishlistProvider>
       </CartProvider>
+      </PromotionProvider>
     </AuthProvider>
   );
 }

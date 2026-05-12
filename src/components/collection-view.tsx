@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product-card";
 import { ChevronDownIcon, CloseIcon } from "@/components/icons";
 import type { Product, ShoeType, ShoeMaterial } from "@/types";
 import { getSeller } from "@/data/sellers";
+import { usePromotion } from "@/components/promotion-provider";
 
 type SortOption = "featured" | "price-asc" | "price-desc" | "newest";
 
@@ -34,6 +35,7 @@ export function CollectionView({ products, collectionName, initialSellerSlug }: 
   );
   const [sortOpen, setSortOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const { promotedProductIds } = usePromotion();
 
   const filtered = useMemo(() => {
     let result = products;
@@ -81,8 +83,16 @@ export function CollectionView({ products, collectionName, initialSellerSlug }: 
         break;
     }
 
+    // Promoted products always appear first
+    if (promotedProductIds.length > 0) {
+      result = [
+        ...result.filter((p) => promotedProductIds.includes(p.id)),
+        ...result.filter((p) => !promotedProductIds.includes(p.id)),
+      ];
+    }
+
     return result;
-  }, [products, gender, sort, priceRange, shoeTypes, materials, sizes, sellerSlugs]);
+  }, [products, gender, sort, priceRange, shoeTypes, materials, sizes, sellerSlugs, promotedProductIds]);
 
   const activeFilterCount =
     (gender !== "all" ? 1 : 0) +

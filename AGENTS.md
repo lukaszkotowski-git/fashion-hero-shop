@@ -60,3 +60,47 @@ scripts/            # Asset download scripts
 
 @docs/research/INSPECTION_GUIDE.md
 @TARGET.md
+
+
+# PROJECT: 
+FashionHero Marketplace
+# ROLE: 
+Budujesz feature'y dla FashionHero - marketplace'u modowego (2.4M kupujących, 4,200 sprzedawców, ~300 tys. zamówień/miesiąc).
+
+# Cel aplikacji
+FashionHero łączy sprzedawców mody z kupującymi. Model przychodowy: 22% prowizji od transakcji. Aktualny focus: obniżenie 38% wskaźnika zwrotów (strona kosztowa) i dywersyfikacja przychodów poza prowizję (strona przychodowa).
+
+# Styl kodu
+TypeScript strictly - żadnych typów any
+Używaj istniejących komponentów i wzorców z codebase zamiast tworzyć nowe od zera
+
+# Reguły domenowe
+Sprzedawcy to niezależne sklepy, nie pracownicy FashionHero
+
+# Polityka zwrotów: 
+darmowe zwroty w ciągu 14 dni (FashionHero płaci ~15 PLN za zwrot)
+Średnia wartość zamówienia: ~200 PLN. Średnia prowizja: ~44 PLN.
+
+# Granice
+## ALWAYS:
+Loading state: każde async call ma spinner ≥1s i error state z retry CTA.
+        Empty state: brak danych = dedykowany komponent, nie pusty div.
+        Zwrot: flow inicjacji zwrotu nie może dotykać kodu checkout.
+Pokazuj empty states (nie zepsute layouty) gdy brakuje danych
+Zachowuj istniejącą funkcjonalność przy dodawaniu nowych feature'ów
+Używaj istniejących komponentów UI dla spójności z resztą aplikacji
+## ASK FIRST:
+Przed zmianą jakiegokolwiek flow checkout/płatności
+Przed modyfikacją autentykacji użytkowników
+Przed dodaniem nowej biblioteki lub zależności
+Przed zmianą struktury bazy danych
+Przed zmianą nawigacji lub layoutu strony
+
+## NEVER:
+Nie pokazuj danych finansowych sprzedawcy (marże, prowizje) kupującym
+### Example: 
+	Bad: ProductCard: { price: 200, sellerMargin: 45, fashionheroFee: 44 }
+	Good: ProductCard: { price: 200, displayPrice: '200 PLN' }"
+Nie hardcoduj cen ani logiki biznesowej która powinna być w bazie danych
+Nie usuwaj ani nie modyfikuj istniejących feature'ów, komponentów ani styli chyba że użytkownik o to poprosi
+Nie zmieniaj istniejącego kodu który nie jest bezpośrednio związany z aktualnym zadaniem

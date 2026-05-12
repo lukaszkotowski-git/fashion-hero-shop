@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import type { Product } from "@/types";
 import { WishlistButton } from "./wishlist-button";
 import { useQuickView } from "./quick-view-provider";
+import { usePromotion } from "./promotion-provider";
 import { getSellerById } from "@/data/sellers";
 
 interface ProductCardProps {
@@ -25,7 +26,9 @@ function hasRealImage(src: string): boolean {
 export function ProductCard({ product, className }: ProductCardProps) {
   const firstColor = product.colors[0];
   const { openQuickView } = useQuickView();
+  const { promotedProductIds } = usePromotion();
   const seller = getSellerById(product.sellerId);
+  const isPromoted = promotedProductIds.includes(product.id);
   const badgeLabel = product.badge === "new"
     ? "NEW"
     : product.badge === "new-color"
@@ -51,6 +54,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
             {badgeLabel && (
               <span className="absolute top-3 left-3 text-[10px] font-medium uppercase tracking-wider bg-white/90 px-2 py-1 z-10">
                 {badgeLabel}
+              </span>
+            )}
+            {isPromoted && (
+              <span className="absolute top-3 right-10 text-[10px] font-semibold uppercase tracking-wider bg-amber-400 text-amber-900 px-2 py-1 z-10">
+                Promowany
               </span>
             )}
             {showImage ? (
